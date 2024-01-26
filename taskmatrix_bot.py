@@ -20,14 +20,15 @@ async def main():
     # Инициализация бота
     bot = Bot(TELEGRAM_TOKEN)
 
-    # Инициализация диспетчера
+    # Инициализация диспетчера с привязкой бота
     dp = Dispatcher()
+    dp.set_bot(bot)
 
     # Регистрация обработчика команды /start
     dp.message.register(start, CommandStart())
 
-    # Запуск поллинга
-    await dp.start_polling()
+    # Запуск поллинга с передачей экземпляра бота
+    await dp.start_polling(bot)
 
 # Запуск асинхронного цикла
 if __name__ == '__main__':
