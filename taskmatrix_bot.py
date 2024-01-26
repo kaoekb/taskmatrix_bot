@@ -9,9 +9,14 @@ load_dotenv(find_dotenv())
 # Получение токена бота из переменных окружения
 TELEGRAM_TOKEN = os.getenv("Token_tg")
 
-# Инициализация бота и диспетчера
+# Инициализация бота
 bot = Bot(TELEGRAM_TOKEN)
-dp = Dispatcher(bot)
+
+# Инициализация диспетчера
+dp = Dispatcher()
+
+# Регистрация бота в диспетчере
+dp.set_bot(bot)
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
@@ -20,7 +25,7 @@ async def start(message: types.Message):
     await message.answer("Матрица задач", reply_markup=markup)
 
 async def main():
-    # Запуск процесса поллинга (опроса серверов Telegram)
+    # Запуск процесса поллинга
     await dp.start_polling()
 
 # Запуск асинхронного цикла
