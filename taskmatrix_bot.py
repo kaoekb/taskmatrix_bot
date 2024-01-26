@@ -3,6 +3,7 @@ from aiogram.types import Message
 import asyncio
 import os
 from dotenv import load_dotenv, find_dotenv
+from aiogram.filters import CommandStart
 
 # Загрузка переменных окружения
 load_dotenv(find_dotenv())
@@ -23,7 +24,7 @@ async def main():
     dp = Dispatcher()
 
     # Регистрация обработчика команды /start
-    dp.message.register(start, commands=['start'])
+    dp.message.register(start, CommandStart())
 
     # Запуск поллинга
     await dp.start_polling()
