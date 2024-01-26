@@ -1,0 +1,12 @@
+[Unit]
+Description=taskmatrix_bot
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/root/programs/taskmatrix_bot
+ExecStart=/usr/bin/python3 /root/programs/taskmatrix_bot/taskmatrix_bot.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
