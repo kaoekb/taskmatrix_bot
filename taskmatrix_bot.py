@@ -1,4 +1,5 @@
 from aiogram import Bot, Dispatcher, types
+from aiogram.contrib.middlewares.logging import LoggingMiddleware
 import asyncio
 import os
 from dotenv import load_dotenv, find_dotenv
@@ -9,14 +10,11 @@ load_dotenv(find_dotenv())
 # Получение токена бота из переменных окружения
 TELEGRAM_TOKEN = os.getenv("Token_tg")
 
-# Инициализация бота
-bot = Bot(TELEGRAM_TOKEN)
-
 # Инициализация диспетчера
 dp = Dispatcher()
 
-# Регистрация бота в диспетчере
-dp.set_bot(bot)
+# Добавление логирования (по желанию)
+dp.middleware.setup(LoggingMiddleware())
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
@@ -25,8 +23,10 @@ async def start(message: types.Message):
     await message.answer("Матрица задач", reply_markup=markup)
 
 async def main():
-    # Запуск процесса поллинга
-    await dp.start_polling()
+    # Инициализация и регистрация бота в диспетчере
+    async with Bot(TELEGRAM_TOKEN) as bot:
+        dp.set_bot(bot)
+        await dp.start_polling()
 
 # Запуск асинхронного цикла
 if __name__ == '__main__':
