@@ -1,19 +1,28 @@
-
 from aiogram import Bot, Dispatcher, types
-from aiogram.utils import executor
-# from aiogram import executor
-from aiogram.types.web_app_info import WebAppInfo
+import asyncio
 import os
 from dotenv import load_dotenv, find_dotenv
+
+# Загрузка переменных окружения
 load_dotenv(find_dotenv())
 
-bot = Bot(Token_tg)
+# Получение токена бота из переменных окружения
+TELEGRAM_TOKEN = os.getenv("Token_tg")
+
+# Инициализация бота и диспетчера
+bot = Bot(TELEGRAM_TOKEN)
 dp = Dispatcher(bot)
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.KeyboardButton(text="Открыть матрицу задач", web_app=WebAppInfo(url="https://taskmatrix.online/")))
+    markup.add(types.KeyboardButton(text="Открыть матрицу задач", web_app=types.WebAppInfo(url="https://taskmatrix.online/")))
     await message.answer("Матрица задач", reply_markup=markup)
 
-executor.start_polling(dp)
+async def main():
+    # Запуск процесса поллинга (опроса серверов Telegram)
+    await dp.start_polling()
+
+# Запуск асинхронного цикла
+if __name__ == '__main__':
+    asyncio.run(main())
