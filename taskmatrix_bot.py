@@ -9,7 +9,7 @@ load_dotenv(find_dotenv())
 # Получение токена бота из переменных окружения
 TELEGRAM_TOKEN = os.getenv("Token_tg")
 
-async def start(message: types.Message):
+async def start_handler(message: types.Message):
     markup = types.InlineKeyboardMarkup()
     markup.add(types.KeyboardButton(text="Открыть матрицу задач", web_app=types.WebAppInfo(url="https://taskmatrix.online/")))
     await message.answer("Матрица задач", reply_markup=markup)
@@ -19,13 +19,13 @@ async def main():
     bot = Bot(TELEGRAM_TOKEN)
 
     # Инициализация диспетчера
-    dp = Dispatcher(bot)
+    dp = Dispatcher()
 
-    # Добавление обработчика команды /start
-    dp.message_handler(commands=['start'])(start)
+    # Регистрация обработчика команд
+    dp.message_handlers.register(start_handler, commands=['start'])
 
     # Запуск поллинга
-    await dp.start_polling()
+    await dp.start_polling(bot)
 
 # Запуск асинхронного цикла
 if __name__ == '__main__':
